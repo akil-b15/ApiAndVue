@@ -31,7 +31,7 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -42,7 +42,11 @@ class ArticleController extends Controller
      */
     public function show($id)
     {
-        //
+        // get article
+        $article = Article::findorFail($id);
+
+        // return single article as a resource 
+        return new ArticleResource($article);
     }
 
     /**
