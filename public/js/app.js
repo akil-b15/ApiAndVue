@@ -2091,6 +2091,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // import { defineComponent } from '@vue/composition-api'
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2132,6 +2141,23 @@ __webpack_require__.r(__webpack_exports__);
         prev_page_url: links.prev
       };
       this.pagination = pagination;
+    },
+    deleteArticle: function deleteArticle(id) {
+      var _this2 = this;
+
+      if (confirm('Are you sure?')) {
+        fetch("api/article/".concat(id), {
+          method: 'delete'
+        }).then(function (res) {
+          return res.json();
+        }).then(function (data) {
+          alert('Article Removed');
+
+          _this2.fetchArticles();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      }
     }
   }
 });
@@ -37817,15 +37843,45 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm._l(_vm.articles, function(article) {
-        return _c(
-          "div",
-          { key: article.id, staticClass: "card card-body mb-2" },
-          [
+        return _c("div", { key: article.id, staticClass: "row mb-2" }, [
+          _c("div", { staticClass: "col-md-10" }, [
             _c("h3", [_vm._v(_vm._s(article.title))]),
             _vm._v(" "),
             _c("p", [_vm._v(_vm._s(article.body))])
-          ]
-        )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-1" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                on: {
+                  click: function($event) {
+                    return _vm.deleteArticle(article.id)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-trash" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-1" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-info",
+                on: {
+                  click: function($event) {
+                    return _vm.deleteArticle(article.id)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "far fa-edit" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("hr")
+        ])
       })
     ],
     2
