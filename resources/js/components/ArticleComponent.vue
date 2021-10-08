@@ -31,7 +31,9 @@
                 <h3>{{ article.title }}</h3>
                 <p>{{ article.body }}</p>
             </div>
-            <!-- edit  -->
+            <div class="col-md-1 text-end">
+                <button @click="editArticle(article)" class="btn btn-primary"><i class="far fa-edit"></i></button>
+            </div>
             <div class="col-md-1">
                 <button @click="deleteArticle(article.id)" class="btn btn-danger"><i class="fas fa-trash"></i></button>
             </div>
@@ -115,10 +117,28 @@ export default{
                 })
             }else{
                 // update
-                
+                fetch('api/article', {
+                    method: 'put',
+                    body: JSON.stringify(this.article),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(res => res.json())
+                .then(data => {
+                    this.article.title = '';
+                    this.article.body = '';
+                    alert('Article updated');
+                    this.fetchArticles();
+                })
             }
         },
-        // editarticle
+        editArticle(article) {
+            this.edit = true;
+            this.article.id = article.id;
+            this.article.article_id = article.id;
+            this.article.title = article.title;
+            this.article.body = article.body;
+        }
     }
 }
 </script>
