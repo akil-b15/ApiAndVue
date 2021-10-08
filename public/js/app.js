@@ -2100,6 +2100,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // import { defineComponent } from '@vue/composition-api'
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2158,6 +2167,52 @@ __webpack_require__.r(__webpack_exports__);
           return console.log(err);
         });
       }
+    },
+    addArticle: function addArticle() {
+      var _this3 = this;
+
+      if (this.edit === false) {
+        // add
+        fetch('api/article', {
+          method: 'post',
+          body: JSON.stringify(this.article),
+          headers: {
+            'content-type': 'application/json'
+          }
+        }).then(function (res) {
+          return res.json();
+        }).then(function (data) {
+          _this3.article.title = '';
+          _this3.article.body = '';
+          alert('Article added');
+
+          _this3.fetchArticles();
+        });
+      } else {
+        // update
+        fetch('api/article', {
+          method: 'put',
+          body: JSON.stringify(this.article),
+          headers: {
+            'content-type': 'application/json'
+          }
+        }).then(function (res) {
+          return res.json();
+        }).then(function (data) {
+          _this3.article.title = '';
+          _this3.article.body = '';
+          alert('Article updated');
+
+          _this3.fetchArticles();
+        });
+      }
+    },
+    editArticle: function editArticle(article) {
+      this.edit = true;
+      this.article.id = article.id;
+      this.article.article_id = article.id;
+      this.article.title = article.title;
+      this.article.body = article.body;
     }
   }
 });
@@ -37777,8 +37832,76 @@ var render = function() {
     [
       _c("h2", [_vm._v("Articles")]),
       _vm._v(" "),
+      _c(
+        "form",
+        {
+          staticClass: "mb-3",
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.addArticle.apply(null, arguments)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "form-group mb-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.article.title,
+                  expression: "article.title"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Title" },
+              domProps: { value: _vm.article.title },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.article, "title", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group mb-2" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.article.body,
+                  expression: "article.body"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { placeholder: "Body" },
+              domProps: { value: _vm.article.body },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.article, "body", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+            [_vm._v("Save")]
+          )
+        ]
+      ),
+      _vm._v(" "),
       _c("nav", { attrs: { "aria-label": "Page navigation example" } }, [
-        _c("ul", { staticClass: "pagination" }, [
+        _c("ul", { staticClass: "pagination justify-content-center" }, [
           _c(
             "li",
             {
@@ -37850,6 +37973,21 @@ var render = function() {
             _c("p", [_vm._v(_vm._s(article.body))])
           ]),
           _vm._v(" "),
+          _c("div", { staticClass: "col-md-1 text-end" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                on: {
+                  click: function($event) {
+                    return _vm.editArticle(article)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "far fa-edit" })]
+            )
+          ]),
+          _vm._v(" "),
           _c("div", { staticClass: "col-md-1" }, [
             _c(
               "button",
@@ -37862,21 +38000,6 @@ var render = function() {
                 }
               },
               [_c("i", { staticClass: "fas fa-trash" })]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-1" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-info",
-                on: {
-                  click: function($event) {
-                    return _vm.deleteArticle(article.id)
-                  }
-                }
-              },
-              [_c("i", { staticClass: "far fa-edit" })]
             )
           ]),
           _vm._v(" "),
@@ -37923,7 +38046,7 @@ var staticRenderFns = [
       [
         _c("div", { staticClass: "container" }, [
           _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-            _vm._v("Larticles")
+            _vm._v("Laravel and Vue")
           ])
         ])
       ]

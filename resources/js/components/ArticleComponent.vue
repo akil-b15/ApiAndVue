@@ -1,8 +1,17 @@
 <template>
     <div>
         <h2>Articles</h2>
+        <form @submit.prevent="addArticle" class="mb-3">
+            <div class="form-group mb-2">
+              <input type="text" class="form-control" placeholder="Title" v-model="article.title">
+            </div>
+            <div class="form-group mb-2">
+              <textarea class="form-control" placeholder="Body" v-model="article.body"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
         <nav aria-label="Page navigation example">
-        <ul class="pagination">
+        <ul class="pagination justify-content-center">
             <li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item">
                 <a class="page-link" href="#"
                 @click="fetchArticles(pagination.prev_page_url)">Previous</a>
@@ -22,11 +31,9 @@
                 <h3>{{ article.title }}</h3>
                 <p>{{ article.body }}</p>
             </div>
+            <!-- edit  -->
             <div class="col-md-1">
                 <button @click="deleteArticle(article.id)" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-            </div>
-            <div class="col-md-1">
-                <button @click="deleteArticle(article.id)" class="btn btn-primary"><i class="far fa-edit"></i></button>
             </div>
             <hr>
         </div>
@@ -89,7 +96,29 @@ export default{
                 })
                 .catch(err => console.log(err));
             }
-        }
+        },
+        addArticle() {
+            if (this.edit === false){
+                // add
+                fetch('api/article', {
+                    method: 'post',
+                    body: JSON.stringify(this.article),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(res => res.json())
+                .then(data => {
+                    this.article.title = '';
+                    this.article.body = '';
+                    alert('Article added');
+                    this.fetchArticles();
+                })
+            }else{
+                // update
+                
+            }
+        },
+        // editarticle
     }
 }
 </script>
